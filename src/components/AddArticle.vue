@@ -1,3 +1,3 @@
 <template>
-    <h1>Add</h1>
+    <h2>AJouter un article</h2>
 </template>
