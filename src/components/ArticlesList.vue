@@ -1,19 +1,55 @@
 <template>
-    <div class="conatiner">
+    <!-- <div class="container">
         <h1>Liste des articles : </h1>
         <div>
             <ul>
-                <li></li>
+                <li v-for="(unArticle, index) in articles" :key="index" v-on:click="setActiveArticle(unArticle, index)">
+                    {{ unArticle.title }}
+                </li>
             </ul>
-            <button>oui</button>
+            <button v-on:click="removeAllArticle()" >Tout supprimer</button>
         </div>
     </div>
+    <div class="details">
+        <div v-if="currentArticle != null">
+            <article-details :article="currentArticle" @refreshList="refreshList()"></article-details>
+        </div>
+        <div v-else>
+            <p>Veuillez sélectionner un article.</p>
+        </div>
+    </div> -->
+    <h1>LIste de tous les articles :</h1>
 </template>
 
 <script setup>
-/* eslint-disable */
 import ArticleDataService from '@/ArticleDataService';
-import ArticleDetails from './Article.vue'
+import { onMounted, ref } from 'vue';
+
+const articles = ref([])
+
+function onDataChange(items) {
+    let _articles = []
+
+    items.forEach(item => {
+        let key = item.key
+        let data = item.val
+        _articles.push({
+            key: key,
+            title: data.title,
+            description: data.description,
+            published: data.published
+        })})
+    articles.value = _articles
+    console.log(articles.value)
+    }
+
+    onMounted(() => {
+        ArticleDataService.getAll().on('value', onDataChange)
+    })
+
+
+/* import ArticleDataService from '@/ArticleDataService';
+import ArticleDetails from './uArticle.vue'
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 const name = ref('article-list')
@@ -63,7 +99,7 @@ function onDataChange(items) {
 
     onBeforeUnmount(() => {
         ArticleDataService.getAll().off(value, onDataChange)
-    })
-}
+    }) 
+}*/
 
 </script>
