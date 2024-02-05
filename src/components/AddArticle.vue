@@ -5,7 +5,8 @@
         <input v-model="article.title" type="text" name="title" id="title">
         <label>Description de l'article</label>
         <input v-model="article.description" type="text" name="description" id="description">
-        <button @click="saveArticle()" type="submit" id="submit-form-add">Envoyer</button>
+        <button v-on:click="saveArticle()" type="submit" id="submit-form-add">Envoyer</button>
+        <p>{{submitted}}</p>
     </div>
 </template>
 
@@ -37,6 +38,15 @@ function saveArticle() {
         .catch(error => {
             console.log(error)
         })
+}
+
+function newArticle() {
+    submitted.value = false
+    article.value = {
+        title: '',
+        description: '',
+        published: false
+    }
 }
 </script>
 

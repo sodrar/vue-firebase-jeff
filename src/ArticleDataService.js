@@ -1,6 +1,6 @@
-import firebase from "./firebase"
+import firebase from './firebase';
 
-const db = firebase.ref('/articles')
+const db = firebase.ref("/articles");
 
 class ArticleDataService {
     getAll() {
@@ -12,16 +12,15 @@ class ArticleDataService {
     }
 
     update(key, value) {
-        db.child(key).update(value)
+        return db.child(key).update(value)
     }
 
     delete(key) {
-        db.child(key).remove()
+        return db.child(key).remove()
     }
 
     deleteAll() {
-        db.remove()
+        return db.remove()
     }
 }
-
-export default ArticleDataService
+export default new ArticleDataService()
