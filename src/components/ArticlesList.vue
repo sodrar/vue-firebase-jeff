@@ -1,105 +1,77 @@
 <template>
-    <!-- <div class="container">
-        <h1>Liste des articles : </h1>
-        <div>
-            <ul>
-                <li v-for="(unArticle, index) in articles" :key="index" v-on:click="setActiveArticle(unArticle, index)">
-                    {{ unArticle.title }}
-                </li>
+    <div class="container list row m-auto">
+        <h1>Articles LIST</h1>
+        <div class="col-md-6">
+            <ul class="list-group">
+                <li 
+                class="list-group-item" :class="{ active: index === currentIndex }" 
+                v-for="(unArticle, index) in articles"
+                :key="index" @click="setActiveArticle(unArticle, index)">{{ unArticle.title }}</li>
             </ul>
-            <button v-on:click="removeAllArticle()" >Tout supprimer</button>
+            <button @click="removeAllArticles" class="m-3 btn btn-sm btn-danger">Tout Suppr.</button>
+        </div>
+        <div class="col-md-6">
+            <div v-if="currentArticle">
+                <article-details :article="currentArticle" @refreshList="refreshList"></article-details>
+            </div>
+            <div v-else>
+                <p>Veuillez selectionner un article.</p>
+            </div>
         </div>
     </div>
-    <div class="details">
-        <div v-if="currentArticle != null">
-            <article-details :article="currentArticle" @refreshList="refreshList()"></article-details>
-        </div>
-        <div v-else>
-            <p>Veuillez sélectionner un article.</p>
-        </div>
-    </div> -->
-    <h1>LIste de tous les articles :</h1>
 </template>
-
-<script setup>
-import ArticleDataService from '@/ArticleDataService';
-import { onMounted, ref } from 'vue';
-
-const articles = ref([])
-
-function onDataChange(items) {
-    let _articles = []
-
-    items.forEach(item => {
-        let key = item.key
-        let data = item.val
-        _articles.push({
-            key: key,
-            title: data.title,
-            description: data.description,
-            published: data.published
-        })})
-    articles.value = _articles
-    console.log(articles.value)
-    }
-
-    onMounted(() => {
-        ArticleDataService.getAll().on('value', onDataChange)
-    })
-
-
-/* import ArticleDataService from '@/ArticleDataService';
-import ArticleDetails from './uArticle.vue'
-import { onBeforeUnmount, onMounted, ref } from 'vue';
-
-const name = ref('article-list')
-const articles = ref([])
-const currentArticle = ref(null)
-const currentIndex = ref(-1)
-
-function onDataChange(items) {
-    let _articles = []
-
-    items.forEach(item => {
-        let key = item.key
-        let data = item.val
-        _articles.push({
-            key: item.key,
-            title: data.title,
-            description: data.description,
-            published: data.published
-        })
-    })
-
-    articles.value = _articles
-
-    function refreshList() {
-        currentArticle.value = null
-        currentIndex.value = -1
-    }
-
-    function setActiveArticle(article, index) {
-        currentArticle.value = article
-        currentIndex.value = index
-    }
-
-    function removeAllArticle() {
-        ArticleDataService.deleteAll()
-            .then(() => {
-                refreshList()
+<script lang='js'>
+import ArticleDataService from "../ArticleDataService";
+import ArticleDetails from "./uArticle.vue";
+export default{
+    name: 'articles-list',
+    components:{ ArticleDetails},
+    data(){
+        return{
+            articles: [],
+            currentArticle: null,
+            currentIndex: -1
+        }
+    },
+    methods: {
+        onDataChange(items) {
+            let _articles = [];
+            items.forEach((item) => {
+                let key = item.key;
+                let data = item.val();
+                _articles.push({
+                key: key,
+                title: data.title,
+                description: data.description,
+                published: data.published,
+                });
+            });
+            this.articles = _articles;
+        },
+        refreshList(){
+            this.currentArticle = null;
+            this.currentIndex = -1;
+        },
+        setActiveArticle(article, index){
+            this.currentArticle = article;
+            this.currentIndex = index;
+        },
+        removeAllArticles(){
+            ArticleDataService.deleteAll()
+            .then(()=>{
+                this.refreshList();
             })
-            .catch(error => {
-                console.log(error)
-            })
+            .catch((e)=>console.log(e));
+        }
+    },
+    mounted(){
+        ArticleDataService.getAll().on('value', this.onDataChange)
+    },
+    beforeUnmount(){
+        ArticleDataService.getAll().off('value', this.onDataChange)
     }
-
-    onMounted(() => {
-        ArticleDataService.getAll().on(value, onDataChange)
-    })
-
-    onBeforeUnmount(() => {
-        ArticleDataService.getAll().off(value, onDataChange)
-    }) 
-}*/
-
+}
 </script>
+
+<style scoped lang="css">
+</style>
