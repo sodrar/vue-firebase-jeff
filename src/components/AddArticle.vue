@@ -1,6 +1,6 @@
 <template>
-    <h2>AJouter un article</h2>
     <form>
+        <h2>Ajouter un article 💸</h2>
         <label>Titre de l'article</label>
         <input type="text" name="title" id="title">
         <label>Description de l'article</label>
@@ -21,3 +21,28 @@ const article = ref({
     published: false
 })
 </script>
+
+<style scoped>
+form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: auto;
+    border: solid 1px coral;
+    padding: 25px;
+    margin-top: 110px;
+    border-radius: 5px;
+}
+
+label {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+#submit-form-add {
+    width: 240px;
+    margin: auto;
+    margin-top: 15px;
+    background-color: white;
+}
+</style>

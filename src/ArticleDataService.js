@@ -1,4 +1,4 @@
-import firebase from "./firebase"
+/* import firebase from "./firebase"
 
 const db = firebase.ref('/articles')
 
@@ -24,4 +24,4 @@ class ArticleDataService {
     }
 }
 
-export default ArticleDataService
+export default ArticleDataService */
